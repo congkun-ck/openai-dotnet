@@ -64,7 +64,14 @@ namespace OpenAI.RealtimeConversation
             if (_additionalBinaryDataProperties?.ContainsKey("voice") != true)
             {
                 writer.WritePropertyName("voice"u8);
-                writer.WriteStringValue(Voice.ToString());
+                if (Voice.IsAzureVoice)
+                {
+                    writer.WriteRawValue(JsonSerializer.Serialize(Voice.AzureVoice));
+                }
+                else
+                {
+                    writer.WriteStringValue(Voice.ToString());
+                }
             }
             if (_additionalBinaryDataProperties?.ContainsKey("input_audio_format") != true)
             {
@@ -139,6 +146,16 @@ namespace OpenAI.RealtimeConversation
                     writer.WriteNull("max_response_output_tokens"u8);
                 }
             }
+            if (_additionalBinaryDataProperties?.ContainsKey("input_audio_echo_cancellation") != true)
+            {
+                writer.WritePropertyName("input_audio_echo_cancellation"u8);
+                writer.WriteRawValue(JsonSerializer.Serialize(InputAudioEchoCancellation));
+            }
+            if (_additionalBinaryDataProperties?.ContainsKey("input_audio_noise_reduction") != true)
+            {
+                writer.WritePropertyName("input_audio_noise_reduction"u8);
+                writer.WriteRawValue(JsonSerializer.Serialize(InputAudioNoiseReduction));
+            }
             if (_additionalBinaryDataProperties != null)
             {
                 foreach (var item in _additionalBinaryDataProperties)
@@ -193,6 +210,8 @@ namespace OpenAI.RealtimeConversation
             BinaryData toolChoice = default;
             float temperature = default;
             BinaryData maxResponseOutputTokens = default;
+            InputAudioNoiseReduction inputAudioNS = default;
+            InputAudioEchoCancellation inputAudioEC = default;
             IDictionary<string, BinaryData> additionalBinaryDataProperties = new ChangeTrackingDictionary<string, BinaryData>();
             foreach (var prop in element.EnumerateObject())
             {
@@ -228,7 +247,19 @@ namespace OpenAI.RealtimeConversation
                 }
                 if (prop.NameEquals("voice"u8))
                 {
-                    voice = new ConversationVoice(prop.Value.GetString());
+                    if (prop.Value.ValueKind == JsonValueKind.String)
+                    {
+                        voice = new ConversationVoice(prop.Value.GetString());
+                    }
+                    if (prop.Value.ValueKind == JsonValueKind.Object)
+                    {
+                        var azVoice = JsonSerializer.Deserialize<AzureVoice>(prop.Value);
+                        voice = new ConversationVoice(string.Empty, azVoice);
+                    }
+                    else
+                    {
+                        voice = new ConversationVoice(prop.Value.GetString());
+                    }
                     continue;
                 }
                 if (prop.NameEquals("input_audio_format"u8))
@@ -286,6 +317,22 @@ namespace OpenAI.RealtimeConversation
                     maxResponseOutputTokens = BinaryData.FromString(prop.Value.GetRawText());
                     continue;
                 }
+                if (prop.NameEquals("input_audio_echo_cancellation"u8))
+                {
+                    if (prop.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    inputAudioEC = JsonSerializer.Deserialize<InputAudioEchoCancellation>(prop.Value);
+                }
+                if (prop.NameEquals("input_audio_noise_reduction"u8))
+                {
+                    if (prop.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    inputAudioNS = JsonSerializer.Deserialize<InputAudioNoiseReduction>(prop.Value);
+                }
                 additionalBinaryDataProperties.Add(prop.Name, BinaryData.FromString(prop.Value.GetRawText()));
             }
             return new InternalRealtimeResponseSession(
@@ -303,6 +350,8 @@ namespace OpenAI.RealtimeConversation
                 toolChoice,
                 temperature,
                 maxResponseOutputTokens,
+                inputAudioEC,
+                inputAudioNS,
                 additionalBinaryDataProperties);
         }
 

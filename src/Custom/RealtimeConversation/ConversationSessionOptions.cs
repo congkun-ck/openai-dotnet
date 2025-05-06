@@ -2,8 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.ClientModel.Primitives;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace OpenAI.RealtimeConversation;
+
+public class InputAudioNoiseReduction
+{
+    [JsonPropertyName("type")]
+    public string Type { get; set; }
+}
+
+public class InputAudioEchoCancellation
+{
+    [JsonPropertyName("type")]
+    public string Type { get; set; }
+}
 
 [Experimental("OPENAI002")]
 [CodeGenType("RealtimeRequestSession")]
@@ -52,4 +65,8 @@ public partial class ConversationSessionOptions
 
     [CodeGenMember("InputAudioTranscription")]
     public ConversationInputTranscriptionOptions InputTranscriptionOptions { get; set; }
+
+    public InputAudioNoiseReduction InputAudioNoiseReduction { get; set; }
+
+    public InputAudioEchoCancellation InputAudioEchoCancellation { get; set; }
 }

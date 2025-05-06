@@ -30,7 +30,7 @@ namespace OpenAI.RealtimeConversation
             _maxResponseOutputTokens = maxResponseOutputTokens;
         }
 
-        internal InternalRealtimeResponseSession(InternalRealtimeResponseSessionObject @object, string id, string model, IList<InternalRealtimeRequestSessionModality> modalities, string instructions, ConversationVoice voice, ConversationAudioFormat inputAudioFormat, ConversationAudioFormat outputAudioFormat, ConversationInputTranscriptionOptions inputAudioTranscription, ConversationTurnDetectionOptions turnDetection, IReadOnlyList<ConversationTool> tools, BinaryData toolChoice, float temperature, BinaryData maxResponseOutputTokens, IDictionary<string, BinaryData> additionalBinaryDataProperties)
+        internal InternalRealtimeResponseSession(InternalRealtimeResponseSessionObject @object, string id, string model, IList<InternalRealtimeRequestSessionModality> modalities, string instructions, ConversationVoice voice, ConversationAudioFormat inputAudioFormat, ConversationAudioFormat outputAudioFormat, ConversationInputTranscriptionOptions inputAudioTranscription, ConversationTurnDetectionOptions turnDetection, IReadOnlyList<ConversationTool> tools, BinaryData toolChoice, float temperature, BinaryData maxResponseOutputTokens, InputAudioEchoCancellation inputEC, InputAudioNoiseReduction inputNS,  IDictionary<string, BinaryData> additionalBinaryDataProperties)
         {
             Object = @object;
             Id = id;
@@ -46,6 +46,8 @@ namespace OpenAI.RealtimeConversation
             ToolChoice = toolChoice;
             Temperature = temperature;
             _maxResponseOutputTokens = maxResponseOutputTokens;
+            InputAudioEchoCancellation = inputEC;
+            InputAudioNoiseReduction = inputNS;
             _additionalBinaryDataProperties = additionalBinaryDataProperties;
         }
 
@@ -74,6 +76,10 @@ namespace OpenAI.RealtimeConversation
         public BinaryData ToolChoice { get; }
 
         public float Temperature { get; }
+
+        public InputAudioEchoCancellation InputAudioEchoCancellation { get; }
+
+        public InputAudioNoiseReduction InputAudioNoiseReduction { get; }
 
         internal IDictionary<string, BinaryData> SerializedAdditionalRawData
         {

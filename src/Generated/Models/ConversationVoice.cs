@@ -4,10 +4,26 @@
 
 using System;
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 using OpenAI;
 
 namespace OpenAI.RealtimeConversation
 {
+    public struct AzureVoice
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        [JsonPropertyName("endpoint-id")]
+        public string EndpointId { get; set; }
+
+        [JsonPropertyName("temperature")]
+        public float Temperature { get; set; }
+    }
+
     public readonly partial struct ConversationVoice : IEquatable<ConversationVoice>
     {
         private readonly string _value;
@@ -20,12 +36,17 @@ namespace OpenAI.RealtimeConversation
         private const string ShimmerValue = "shimmer";
         private const string VerseValue = "verse";
 
-        public ConversationVoice(string value)
+        public ConversationVoice(string value, AzureVoice? azVoice = null)
         {
             Argument.AssertNotNull(value, nameof(value));
 
             _value = value;
+            AzureVoice = azVoice;
         }
+
+        public AzureVoice? AzureVoice { get; init; }
+
+        public bool IsAzureVoice => AzureVoice != null;
 
         public static ConversationVoice Alloy { get; } = new ConversationVoice(AlloyValue);
 

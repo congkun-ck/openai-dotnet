@@ -29,4 +29,24 @@ public partial class ConversationTurnDetectionOptions
             CreateResponse = enableAutomaticResponseCreation,
         };
     }
+
+    public static ConversationTurnDetectionOptions CreateAzureSemanticVadTurnDetectionOptions(
+        float? detectionThreshold = null,
+        TimeSpan? prefixPaddingDuration = null,
+        TimeSpan? silenceDuration = null,
+        bool? enableAutomaticResponseCreation = null,
+        bool? removeFillerWords = null,
+        EndOfUtteranceDetection endOfUtteranceDetection = null
+        )
+    {
+        return new InternalRealtimeAzureSemanticVadTurnDetection()
+        {
+            Threshold = detectionThreshold,
+            PrefixPaddingMs = prefixPaddingDuration,
+            SilenceDurationMs = silenceDuration,
+            CreateResponse = enableAutomaticResponseCreation,
+            RemoveFillerWords = removeFillerWords,
+            EndOfUtteranceDetection = endOfUtteranceDetection
+        };
+    }
 }

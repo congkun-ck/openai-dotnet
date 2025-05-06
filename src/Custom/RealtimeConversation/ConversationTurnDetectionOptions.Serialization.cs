@@ -20,6 +20,7 @@ public partial class ConversationTurnDetectionOptions
             {
                 case "none": return InternalRealtimeNoTurnDetection.DeserializeInternalRealtimeNoTurnDetection(element, options);
                 case "server_vad": return InternalRealtimeServerVadTurnDetection.DeserializeInternalRealtimeServerVadTurnDetection(element, options);
+                case "azure_semantic_vad": return InternalRealtimeAzureSemanticVadTurnDetection.DeserializeInternalRealtimeAzureSemanticVadTurnDetection(element, options);
                 default: return null;
             }
         }

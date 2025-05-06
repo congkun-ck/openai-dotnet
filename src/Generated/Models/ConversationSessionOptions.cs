@@ -18,7 +18,7 @@ namespace OpenAI.RealtimeConversation
             _internalModalities = new ChangeTrackingList<InternalRealtimeRequestSessionModality>();
         }
 
-        internal ConversationSessionOptions(string instructions, ConversationVoice? voice, ConversationAudioFormat? inputAudioFormat, ConversationAudioFormat? outputAudioFormat, IList<ConversationTool> tools, float? temperature, InternalRealtimeRequestSessionModel? model, ConversationTurnDetectionOptions turnDetectionOptions, ConversationInputTranscriptionOptions inputTranscriptionOptions, IList<InternalRealtimeRequestSessionModality> internalModalities, BinaryData internalToolChoice, BinaryData maxResponseOutputTokens, IDictionary<string, BinaryData> additionalBinaryDataProperties)
+        internal ConversationSessionOptions(string instructions, ConversationVoice? voice, ConversationAudioFormat? inputAudioFormat, ConversationAudioFormat? outputAudioFormat, IList<ConversationTool> tools, float? temperature, InternalRealtimeRequestSessionModel? model, ConversationTurnDetectionOptions turnDetectionOptions, ConversationInputTranscriptionOptions inputTranscriptionOptions, IList<InternalRealtimeRequestSessionModality> internalModalities, BinaryData internalToolChoice, BinaryData maxResponseOutputTokens, InputAudioEchoCancellation inputAudioEC, InputAudioNoiseReduction inputAudioNS, IDictionary<string, BinaryData> additionalBinaryDataProperties)
         {
             Instructions = instructions;
             Voice = voice;
@@ -32,6 +32,8 @@ namespace OpenAI.RealtimeConversation
             _internalModalities = internalModalities;
             _internalToolChoice = internalToolChoice;
             _maxResponseOutputTokens = maxResponseOutputTokens;
+            InputAudioNoiseReduction = inputAudioNS;
+            InputAudioEchoCancellation = inputAudioEC;
             _additionalBinaryDataProperties = additionalBinaryDataProperties;
         }
 

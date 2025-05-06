@@ -9,5 +9,6 @@ public enum ConversationTurnDetectionKind
 {
     [CodeGenMember("ServerVad")]
     ServerVoiceActivityDetection,
+    AzureSemanticVadDetection,
     Disabled,
 }

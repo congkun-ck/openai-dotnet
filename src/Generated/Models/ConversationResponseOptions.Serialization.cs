@@ -35,7 +35,14 @@ namespace OpenAI.RealtimeConversation
             if (Optional.IsDefined(Voice) && _additionalBinaryDataProperties?.ContainsKey("voice") != true)
             {
                 writer.WritePropertyName("voice"u8);
-                writer.WriteStringValue(Voice.Value.ToString());
+                if (Voice.Value.IsAzureVoice)
+                {
+                    writer.WriteRawValue(JsonSerializer.Serialize(Voice.Value.AzureVoice));
+                }
+                else
+                {
+                    writer.WriteStringValue(Voice.Value.ToString());
+                }
             }
             if (Optional.IsDefined(OutputAudioFormat) && _additionalBinaryDataProperties?.ContainsKey("output_audio_format") != true)
             {
@@ -180,7 +187,15 @@ namespace OpenAI.RealtimeConversation
                     {
                         continue;
                     }
-                    voice = new ConversationVoice(prop.Value.GetString());
+                    if (prop.Value.ValueKind == JsonValueKind.Object)
+                    {
+                        var azVoice = JsonSerializer.Deserialize<AzureVoice>(prop.Value);
+                        voice = new ConversationVoice(string.Empty, azVoice);
+                    }
+                    else
+                    {
+                        voice = new ConversationVoice(prop.Value.GetString());
+                    }
                     continue;
                 }
                 if (prop.NameEquals("output_audio_format"u8))
